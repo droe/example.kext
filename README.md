@@ -34,7 +34,7 @@ As of OS X 10.11 El Capitan, `kext-dev-mode` no longer has any effect.  You
 need to disable the kext protection part of System Integrity Protection (SIP)
 in order to load unsigned kernel extensions:
 
-1.  Reboot into repair mode by pressing <kbd>cmd⌘</kbd>+<kbd>r</kbd>
+1.  Boot into repair mode by pressing <kbd>cmd⌘</kbd>+<kbd>r</kbd> during boot
 2.  Run `csrutil enable --without kext`
 3.  Reboot
 
