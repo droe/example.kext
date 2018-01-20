@@ -1,14 +1,19 @@
-# example macOS kernel extension built using make
+# Makefile for building macOS kernel extensions
 Authored 2018, [Daniel Roethlisberger](//daniel.roe.ch/)  
 https://github.com/droe/example.kext
 
 
 ## Overview
 
-This skeleton example kernel extension for macOS demonstrates how to build
-kexts without the opaque Xcode project bloat.  This is by no means rocket
-science, but since there exists very little up-to-date documentation on how to
-build kernel extensions manually, this might save someone some tinkering.
+`Mk/kext.mk` is a makefile for building macOS kernel extensions without the
+opaque Xcode project bloat.
+
+This example kernel extension for macOS demonstrates how to use `Mk/kext.mk`.
+
+All this is by no means rocket science, but since there exists very little
+up-to-date documentation on how to build kernel extensions manually, this might
+save other inclined kernel hackers with a dislike for GUI based build
+configuration some relief.
 
 
 ## Requirements
