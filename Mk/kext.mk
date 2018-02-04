@@ -158,7 +158,7 @@ install: $(NAME).kext uninstall
 	sudo chown -R root:wheel $(PREFIX)/$<
 
 uninstall:
-	sudo rm -rf $(PREFIX)/$<
+	sudo rm -rf $(PREFIX)/$(NAME).kext
 
 clean:
 	rm -rf $(NAME).kext $(NAME) Info.plist~ $(OBJS)
