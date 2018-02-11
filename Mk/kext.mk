@@ -69,6 +69,7 @@ CPPFLAGS+=	-DKERNEL \
 CPPFLAGS+=	-DNAME_S=\"$(NAME)\" \
 		-DVDEV_S=\"$(VDEV)\" \
 		-DVREL_S=\"$(VREL)\" \
+		-DFQID_S=\"$(FQID)\" \
 		-DFQID=$(FQID) \
 
 # c compiler flags
