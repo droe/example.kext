@@ -155,11 +155,11 @@ unload:
 	sudo kextunload $(NAME).kext
 
 install: $(NAME).kext uninstall
-	sudo cp -pr $< $(PREFIX)/$<
-	sudo chown -R root:wheel $(PREFIX)/$<
+	sudo cp -pr $< "$(PREFIX)/$<"
+	sudo chown -R root:wheel "$(PREFIX)/$<"
 
 uninstall:
-	sudo rm -rf $(PREFIX)/$(NAME).kext
+	test -e "$(PREFIX)/$(NAME).kext" && sudo rm -rf "$(PREFIX)/$(NAME).kext"
 
 clean:
 	rm -rf $(NAME).kext $(NAME) Info.plist~ $(OBJS)
