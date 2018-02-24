@@ -2,13 +2,15 @@
 #include <mach/mach_types.h>
 
 kern_return_t
-example_start(kmod_info_t *ki, void *d) {
+example_start(__attribute__((unused)) kmod_info_t *ki,
+              __attribute__((unused)) void *d) {
 	printf(KEXTNAME_S ": start\n");
 	return KERN_SUCCESS;
 }
 
 kern_return_t
-example_stop(kmod_info_t *ki, void *d) {
+example_stop(__attribute__((unused)) kmod_info_t *ki,
+             __attribute__((unused)) void *d) {
 	printf(KEXTNAME_S ": stop\n");
 	return KERN_SUCCESS;
 }

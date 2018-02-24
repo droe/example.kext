@@ -94,7 +94,7 @@ CFLAGS+=	-arch $(ARCH) \
 		-msoft-float
 
 # warnings
-CFLAGS+=	-Wall
+CFLAGS+=	-Wall -Wextra
 
 # linker flags
 #LDFLAGS+=	-mmacosx-version-min=10.11
