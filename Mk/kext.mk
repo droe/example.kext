@@ -20,6 +20,7 @@
 # KEXTBUNDLE      name of kext bundle directory; default $(KEXTNAME).kext
 # KEXTMACHO       name of kext Mach-O executable; default $(KEXTNAME)
 #
+# SDKROOT         Apple Xcode SDK root directory to use
 # CPPFLAGS        additional precompiler flags
 # CFLAGS          additional compiler flags
 # LDFLAGS         additional linker flags
@@ -61,12 +62,20 @@ ARCH?=		x86_64
 #ARCH?=		i386
 PREFIX?=	/Library/Extensions/
 
+# Apple SDK
+ifneq "" "$(SDKROOT)"
+SDK=		-isysroot $(SDKROOT)
+CC=		$(shell xcrun -find -sdk $(SDKROOT) cc)
+#CXX=		$(shell xcrun -find -sdk $(SDKROOT) c++)
+endif
+
 # standard defines and includes for kernel extensions
 CPPFLAGS+=	-DKERNEL \
 		-DKERNEL_PRIVATE \
 		-DDRIVER_PRIVATE \
 		-DAPPLE \
 		-DNeXT \
+		$(SDK) \
 		-I/System/Library/Frameworks/Kernel.framework/Headers \
 		-I/System/Library/Frameworks/Kernel.framework/PrivateHeaders
 

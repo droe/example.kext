@@ -51,7 +51,6 @@ pull requests or issues pertaining to bugs or missing features.
 
 ## Bugs
 
--   `Mk/kext.mk` does not support targeting a specific version of macOS.
 -   `Mk/kext.mk` only compiles c sources at this point (but you might think
     that abominations such as C++ do not belong in kernelspace anyway).
 
