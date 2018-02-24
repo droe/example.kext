@@ -5,53 +5,58 @@
 
 # Designed to be included from a Makefile which defines the following:
 #
-# NAME      short name of the kext (e.g. example)
-# VREL      release version (e.g. 1.0.0)
-# VDEV      development version (e.g. 1.0.0d1)
-# QUAL      the reverse DNS notation prefix (e.g. com.example)
+# KEXTNAME        short name of the kext (e.g. example)
+# KEXTVERSION     version number, cf TN2420 (e.g. 1.0.0)
+# KEXTBUILD       build number, cd TN2420 (e.g. 1.0.0d1)
+# BUNDLEDOMAIN    the reverse DNS notation prefix (e.g. com.example)
 #
 # Optionally, the Makefile can define the following:
 #
-# SIGNER    the label of the Developer ID cert in your keyring for code signing
-# ARCH      x86_64 (default) or i386
-# PREFIX    install/uninstall location (default /Library/Extensions/)
+# SIGNCERT        label of Developer ID cert in keyring for code signing
+# ARCH            x86_64 (default) or i386
+# PREFIX          install/uninstall location; default /Library/Extensions/
 #
-# CPPFLAGS  additional precompiler flags
-# CFLAGS    additional compiler flags
-# LDFLAGS   additional linker flags
-# LIBS      additional libraries to link against
-# KLFLAGS   additional kextlibs flags
-
+# BUNDLEID        kext bundle ID; default $(BUNDLEDOMAIN).kext.$(KEXTNAME)
+# KEXTBUNDLE      name of kext bundle directory; default $(KEXTNAME).kext
+# KEXTMACHO       name of kext Mach-O executable; default $(KEXTNAME)
+#
+# CPPFLAGS        additional precompiler flags
+# CFLAGS          additional compiler flags
+# LDFLAGS         additional linker flags
+# LIBS            additional libraries to link against
+# KLFLAGS         additional kextlibs flags
 
 # check mandatory vars
 
-ifndef NAME
-$(error NAME not defined)
+ifndef KEXTNAME
+$(error KEXTNAME not defined)
 endif
 
-ifndef VREL
-ifdef VDEV
-VREL:=		$(VDEV)
+ifndef KEXTVERSION
+ifdef KEXTBUILD
+KEXTVERSION:=	$(KEXTBUILD)
 else
-$(error VREL not defined)
+$(error KEXTVERSION not defined)
 endif
 endif
 
-ifndef VDEV
-ifdef VREL
-VDEV:=		$(VREL)
+ifndef KEXTBUILD
+ifdef KEXTVERSION
+KEXTBUILD:=	$(KEXTVERSION)
 else
-$(error VDEV not defined)
+$(error KEXTBUILD not defined)
 endif
 endif
 
-ifndef QUAL
-$(error QUAL not defined)
+ifndef BUNDLEDOMAIN
+$(error BUNDLEDOMAIN not defined)
 endif
 
 
 # defaults
-FQID?=		$(QUAL).kext.$(NAME)
+BUNDLEID?=	$(BUNDLEDOMAIN).kext.$(KEXTNAME)
+KEXTBUNDLE?=	$(KEXTNAME).kext
+KEXTMACHO?=	$(KEXTNAME)
 ARCH?=		x86_64
 #ARCH?=		i386
 PREFIX?=	/Library/Extensions/
@@ -66,11 +71,11 @@ CPPFLAGS+=	-DKERNEL \
 		-I/System/Library/Frameworks/Kernel.framework/PrivateHeaders
 
 # convenience defines
-CPPFLAGS+=	-DNAME_S=\"$(NAME)\" \
-		-DVDEV_S=\"$(VDEV)\" \
-		-DVREL_S=\"$(VREL)\" \
-		-DFQID_S=\"$(FQID)\" \
-		-DFQID=$(FQID) \
+CPPFLAGS+=	-DKEXTNAME_S=\"$(KEXTNAME)\" \
+		-DKEXTVERSION_S=\"$(KEXTVERSION)\" \
+		-DKEXTBUILD_S=\"$(KEXTBUILD)\" \
+		-DBUNDLEID_S=\"$(BUNDLEID)\" \
+		-DBUNDLEID=$(BUNDLEID) \
 
 # c compiler flags
 CFLAGS+=	-arch $(ARCH) \
@@ -107,28 +112,29 @@ MKFS:=		$(wildcard Makefile GNUmakefile Mk/*.mk)
 
 # targets
 
-all: $(NAME).kext
+all: $(KEXTBUNDLE)
 
 %.o: %.c $(HDRS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
 $(OBJS): $(MKFS)
 
-$(NAME): $(OBJS)
+$(KEXTMACHO): $(OBJS)
 	$(CC) $(LDFLAGS) -static -o $@ $(LIBS) $^
 	otool -h $@
 
 Info.plist~: Info.plist.in
 	cat $^ \
-	| sed -e 's/__NAME__/$(NAME)/g' \
-	      -e 's/__VDEV__/$(VDEV)/g' \
-	      -e 's/__VREL__/$(VREL)/g' \
-	      -e 's/__FQID__/$(FQID)/g' \
+	| sed -e 's/__KEXTNAME__/$(KEXTNAME)/g' \
+	      -e 's/__KEXTMACHO__/$(KEXTMACHO)/g' \
+	      -e 's/__KEXTVERSION__/$(KEXTVERSION)/g' \
+	      -e 's/__KEXTBUILD__/$(KEXTBUILD)/g' \
+	      -e 's/__BUNDLEID__/$(BUNDLEID)/g' \
 	>$@
 
-$(NAME).kext: $(NAME) Info.plist~
+$(KEXTBUNDLE): $(KEXTMACHO) Info.plist~
 	mkdir -p $@/Contents/MacOS
-	cp $(NAME) $@/Contents/MacOS
+	cp $< $@/Contents/MacOS
 	cat Info.plist~ \
 	| sed -e 's/__LIBS__//g' \
 	>$@/Contents/Info.plist
@@ -137,34 +143,35 @@ $(NAME).kext: $(NAME) Info.plist~
 	>$@/Contents/Info.plist~
 	mv $@/Contents/Info.plist~ $@/Contents/Info.plist
 	touch $@
-ifdef SIGNER
-	codesign -s $(SIGNER) -f $(NAME).kext
+ifdef SIGNCERT
+	codesign -s $(SIGNCERT) -f $(KEXTBUNDLE)
 endif
 
-load: $(NAME).kext
-	sudo chown -R root:wheel $(NAME).kext
+load: $(KEXTBUNDLE)
+	sudo chown -R root:wheel $<
 	sudo sync
-	sudo kextutil $(NAME).kext
-	sudo chown -R $(USER):$(shell id -gn) $(NAME).kext
-	sudo dmesg|grep $(NAME)|tail -1
+	sudo kextutil $<
+	sudo chown -R $(USER):$(shell id -gn) $<
+	sudo dmesg|grep $(KEXTNAME)|tail -1
 
 stat:
-	kextstat|grep $(NAME)
+	kextstat|grep $(KEXTNAME)
 
 unload:
-	sudo kextunload $(NAME).kext
+	sudo kextunload $(KEXTBUNDLE)
 
-install: $(NAME).kext uninstall
+install: $(KEXTBUNDLE) uninstall
 	test -d "$(PREFIX)"
 	sudo cp -pr $< "$(PREFIX)/$<"
 	sudo chown -R root:wheel "$(PREFIX)/$<"
 
 uninstall:
 	test -d "$(PREFIX)"
-	test -e "$(PREFIX)/$(NAME).kext" && sudo rm -rf "$(PREFIX)/$(NAME).kext" || true
+	test -e "$(PREFIX)/$(KEXTBUNDLE)" && \
+		sudo rm -rf "$(PREFIX)/$(KEXTBUNDLE)" || true
 
 clean:
-	rm -rf $(NAME).kext $(NAME) Info.plist~ $(OBJS)
+	rm -rf $(KEXTBUNDLE) $(KEXTMACHO) Info.plist~ $(OBJS)
 
 
 .PHONY: all load stat unload intall uninstall clean

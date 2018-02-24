@@ -5,15 +5,15 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>__FQID__</string>
+	<string>__BUNDLEID__</string>
 	<key>CFBundleExecutable</key>
-	<string>__NAME__</string>
+	<string>__KEXTMACHO__</string>
 	<key>CFBundleName</key>
-	<string>__NAME__</string>
+	<string>__KEXTNAME__</string>
 	<key>CFBundleVersion</key>
-	<string>__VDEV__</string>
+	<string>__KEXTBUILD__</string>
 	<key>CFBundleShortVersionString</key>
-	<string>__VREL__</string>
+	<string>__KEXTVERSION__</string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleSupportedPlatforms</key>
