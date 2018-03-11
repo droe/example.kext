@@ -12,7 +12,7 @@
 #
 # Optionally, the Makefile can define the following:
 #
-# SIGNCERT        label of Developer ID cert in keyring for code signing
+# DEVIDKEXT       label of Developer ID cert in keyring for code signing
 # ARCH            x86_64 (default) or i386
 # PREFIX          install/uninstall location; default /Library/Extensions/
 #
@@ -20,6 +20,7 @@
 # KEXTBUNDLE      name of kext bundle directory; default $(KEXTNAME).kext
 # KEXTMACHO       name of kext Mach-O executable; default $(KEXTNAME)
 #
+# MACOSX_VERSION_MIN  minimal version of macOS to target
 # SDKROOT         Apple Xcode SDK root directory to use
 # CPPFLAGS        additional precompiler flags
 # CFLAGS          additional compiler flags
@@ -87,6 +88,9 @@ CPPFLAGS+=	-DKEXTNAME_S=\"$(KEXTNAME)\" \
 		-DBUNDLEID=$(BUNDLEID) \
 
 # c compiler flags
+ifdef MACOSX_VERSION_MIN
+CFLAGS+=	-mmacosx-version-min=$(MACOSX_VERSION_MIN)
+endif
 CFLAGS+=	-arch $(ARCH) \
 		-fno-builtin \
 		-fno-common \
@@ -97,7 +101,9 @@ CFLAGS+=	-arch $(ARCH) \
 CFLAGS+=	-Wall -Wextra
 
 # linker flags
-#LDFLAGS+=	-mmacosx-version-min=10.11
+ifdef MACOSX_VERSION_MIN
+LDFLAGS+=	-mmacosx-version-min=$(MACOSX_VERSION_MIN)
+endif
 LDFLAGS+=	-arch $(ARCH)
 LDFLAGS+=	-nostdlib \
 		-Xlinker -kext \
