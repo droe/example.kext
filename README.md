@@ -18,8 +18,8 @@ configuration some relief.
 
 ## Requirements
 
-Tested primarily on El Capitan 10.11.6 (XNU 3248.72.11).  Patches to support
-other macOS releases are very welcome.
+Tested primarily on 10.11 El Capitan and later.  Patches to support other
+releases are very welcome.
 
 
 ## Installation
@@ -51,6 +51,5 @@ pull requests or issues pertaining to bugs or missing features.
 
 ## Bugs
 
--   `Mk/kext.mk` only compiles c sources at this point (but you might think
-    that abominations such as C++ do not belong in kernelspace anyway).
+-   `Mk/kext.mk` only compiles c sources at this point, not C++ or Objective-C.
 
