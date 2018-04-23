@@ -65,7 +65,7 @@ PREFIX?=	/Library/Extensions/
 
 # Apple SDK
 ifneq "" "$(SDKROOT)"
-SDK=		-isysroot $(SDKROOT)
+SDKFLAGS=	-isysroot $(SDKROOT)
 CC=		$(shell xcrun -find -sdk $(SDKROOT) cc)
 #CXX=		$(shell xcrun -find -sdk $(SDKROOT) c++)
 endif
@@ -76,7 +76,7 @@ CPPFLAGS+=	-DKERNEL \
 		-DDRIVER_PRIVATE \
 		-DAPPLE \
 		-DNeXT \
-		$(SDK) \
+		$(SDKFLAGS) \
 		-I/System/Library/Frameworks/Kernel.framework/Headers \
 		-I/System/Library/Frameworks/Kernel.framework/PrivateHeaders
 
