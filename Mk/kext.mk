@@ -63,11 +63,14 @@ ARCH?=		x86_64
 #ARCH?=		i386
 PREFIX?=	/Library/Extensions/
 
+CODESIGN?=	codesign
+
 # Apple SDK
 ifneq "" "$(SDKROOT)"
 SDKFLAGS=	-isysroot $(SDKROOT)
 CC=		$(shell xcrun -find -sdk $(SDKROOT) cc)
 #CXX=		$(shell xcrun -find -sdk $(SDKROOT) c++)
+CODESIGN=	$(shell xcrun -find -sdk $(SDKROOT) codesign)
 endif
 
 # standard defines and includes for kernel extensions
@@ -159,7 +162,7 @@ $(KEXTBUNDLE): $(KEXTMACHO) Info.plist~
 	mv $@/Contents/Info.plist~ $@/Contents/Info.plist
 	touch $@
 ifdef SIGNCERT
-	codesign -s $(SIGNCERT) -f $(KEXTBUNDLE)
+	$(CODESIGN) -s $(SIGNCERT) -f $(KEXTBUNDLE)
 endif
 
 load: $(KEXTBUNDLE)
