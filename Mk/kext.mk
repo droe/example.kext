@@ -161,8 +161,8 @@ $(KEXTBUNDLE): $(KEXTMACHO) Info.plist~
 	>$@/Contents/Info.plist~
 	mv $@/Contents/Info.plist~ $@/Contents/Info.plist
 	touch $@
-ifdef SIGNCERT
-	$(CODESIGN) -s $(SIGNCERT) -f $(KEXTBUNDLE)
+ifdef DEVIDKEXT
+	$(CODESIGN) -s $(DEVIDKEXT) -f $@
 endif
 
 load: $(KEXTBUNDLE)
