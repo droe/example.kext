@@ -38,8 +38,12 @@ path.
 
 ## Installation
 
-As of OS X 10.10 Yosemite, kernel extensions need to be signed.  You need to
-enable `kext-dev-mode` in order to load unsigned kernel extensions:
+To create a signed kext that will load in default system configuration with SIP
+enabled, you will need to obtain a Developer ID certificate specifically for
+signing kernel extensions.
+
+As of OS X 10.10 Yosemite, kernel extensions need to be signed by default.  You
+need to enable `kext-dev-mode` in order to load unsigned kernel extensions:
 
 1.  Run `sudo nvram boot-args=kext-dev-mode=1`
 2.  Reboot
@@ -48,13 +52,16 @@ As of OS X 10.11 El Capitan, `kext-dev-mode` no longer has any effect.  You
 need to disable the kext protection part of System Integrity Protection (SIP)
 in order to load unsigned kernel extensions:
 
-1.  Boot into repair mode by pressing <kbd>cmd⌘</kbd>+<kbd>r</kbd> during boot
+1.  Boot into Recovery OS by pressing <kbd>cmd⌘</kbd>+<kbd>r</kbd> during boot
 2.  Run `csrutil enable --without kext`
 3.  Reboot
 
-To create a signed kext that will load in default system configuration with SIP
-enabled, you will need to obtain a Developer ID certificate specifically for
-signing kernel extensions.
+As of macOS 10.13 High Sierra, all kexts need to be explicitly approved by the
+user before they can be loaded.  Workarounds include disabling user approval or
+allowing your Team ID to bypass user approval using `spctl kext-consent` from
+Recovery OS or NetBoot/NetInstall/NetRestore images, or using Mobile Device
+Management (MDM).  For details, refer to
+[TN2459](https://developer.apple.com/library/archive/technotes/tn2459/).
 
 
 ## Support
