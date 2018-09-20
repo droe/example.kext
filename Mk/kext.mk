@@ -112,6 +112,7 @@ LDFLAGS+=	-nostdlib \
 		-Xlinker -kext \
 		-Xlinker -object_path_lto \
 		-Xlinker -export_dynamic
+LDFLAGS+=	-Xlinker -fatal_warnings
 
 # libraries
 #LIBS+=		-lkmodc++
