@@ -20,8 +20,9 @@
 # KEXTBUNDLE      name of kext bundle directory; default $(KEXTNAME).kext
 # KEXTMACHO       name of kext Mach-O executable; default $(KEXTNAME)
 #
+# DEVELOPER_DIR   select Xcode Command Line Developer Tools directory
 # MACOSX_VERSION_MIN  minimal version of macOS to target
-# SDK             SDK name or path to build against; must match target version
+# SDK             SDK name to build against (e.g. macosx, macosx10.11, ...)
 # CPPFLAGS        additional precompiler flags
 # CFLAGS          additional compiler flags
 # LDFLAGS         additional linker flags
@@ -65,23 +66,33 @@ PREFIX?=	/Library/Extensions/
 
 CODESIGN?=	codesign
 
-# SDK selection
-# e.g. macosx, macosx10.12 or /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+# default SDK for targeted min version
 ifndef SDK
 ifdef MACOSX_VERSION_MIN
 SDK:=		macosx$(MACOSX_VERSION_MIN)
 endif
 endif
+
+# select Xcode
+ifdef DEVELOPER_DIR
+ifndef SDK
+SDK:=		macosx
+endif
+else
+DEVELOPER_DIR:=	$(shell xcode-select -p)
+endif
+
+# activate the selected Xcode and SDK
 ifdef SDK
-SDKPATH:=	$(shell xcrun -find -sdk $(SDK) --show-sdk-path||echo none)
+SDKPATH:=	$(shell DEVELOPER_DIR="$(DEVELOPER_DIR)" xcrun -find -sdk $(SDK) --show-sdk-path||echo none)
 ifeq "$(SDKPATH)" "none"
 $(error SDK not found)
 endif
 CPPFLAGS+=	-isysroot $(SDKPATH)
 LDFLAGS+=	-isysroot $(SDKPATH)
-CC:=		$(shell xcrun -find -sdk $(SDK) cc)
-#CXX:=		$(shell xcrun -find -sdk $(SDK) c++)
-CODESIGN:=	$(shell xcrun -find -sdk $(SDK) codesign)
+CC:=		$(shell DEVELOPER_DIR="$(DEVELOPER_DIR)" xcrun -find -sdk $(SDK) cc||echo false)
+#CXX:=		$(shell DEVELOPER_DIR="$(DEVELOPER_DIR)" xcrun -find -sdk $(SDK) c++||echo false)
+CODESIGN:=	$(shell DEVELOPER_DIR="$(DEVELOPER_DIR)" xcrun -find -sdk $(SDK) codesign||echo false)
 endif
 
 # standard defines and includes for kernel extensions
