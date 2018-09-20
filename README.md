@@ -18,8 +18,22 @@ configuration some relief.
 
 ## Requirements
 
-Tested primarily on 10.11 El Capitan and later.  Patches to support other
-releases are very welcome.
+For building kernel extensions, Apple recommends that you use the
+[latest Xcode version](https://developer.apple.com/download/)
+containing the SDK for the oldest macOS release you target.
+That translates to using
+latest Xcode 7 for targeting 10.11+,
+latest Xcode 8 for targeting 10.12+,
+latest Xcode 9 for targeting 10.13+ and
+latest Xcode 10 for targeting 10.14+.
+This is different from the recommendation for userland code, where the
+recommendation is to use the latest Xcode version available regardless of which
+macOS release you target.
+Wikipedia maintains mappings of Xcode and their SDK versions in their
+[Xcode](https://en.wikipedia.org/wiki/Xcode) article.
+Use `xcode-select -s` to enable a specific Command Line Developer Tools base
+directory as system-wide default or set `SDK` to the respective SDK name or
+path.
 
 
 ## Installation

@@ -21,7 +21,7 @@
 # KEXTMACHO       name of kext Mach-O executable; default $(KEXTNAME)
 #
 # MACOSX_VERSION_MIN  minimal version of macOS to target
-# SDKROOT         Apple Xcode SDK root directory to use
+# SDK             SDK name or path to build against; must match target version
 # CPPFLAGS        additional precompiler flags
 # CFLAGS          additional compiler flags
 # LDFLAGS         additional linker flags
@@ -65,12 +65,23 @@ PREFIX?=	/Library/Extensions/
 
 CODESIGN?=	codesign
 
-# Apple SDK
-ifneq "" "$(SDKROOT)"
-SDKFLAGS=	-isysroot $(SDKROOT)
-CC=		$(shell xcrun -find -sdk $(SDKROOT) cc)
-#CXX=		$(shell xcrun -find -sdk $(SDKROOT) c++)
-CODESIGN=	$(shell xcrun -find -sdk $(SDKROOT) codesign)
+# SDK selection
+# e.g. macosx, macosx10.12 or /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+ifndef SDK
+ifdef MACOSX_VERSION_MIN
+SDK:=		macosx$(MACOSX_VERSION_MIN)
+endif
+endif
+ifdef SDK
+SDKPATH:=	$(shell xcrun -find -sdk $(SDK) --show-sdk-path||echo none)
+ifeq "$(SDKPATH)" "none"
+$(error SDK not found)
+endif
+CPPFLAGS+=	-isysroot $(SDKPATH)
+LDFLAGS+=	-isysroot $(SDKPATH)
+CC:=		$(shell xcrun -find -sdk $(SDK) cc)
+#CXX:=		$(shell xcrun -find -sdk $(SDK) c++)
+CODESIGN:=	$(shell xcrun -find -sdk $(SDK) codesign)
 endif
 
 # standard defines and includes for kernel extensions
@@ -79,7 +90,6 @@ CPPFLAGS+=	-DKERNEL \
 		-DDRIVER_PRIVATE \
 		-DAPPLE \
 		-DNeXT \
-		$(SDKFLAGS) \
 		-I/System/Library/Frameworks/Kernel.framework/Headers \
 		-I/System/Library/Frameworks/Kernel.framework/PrivateHeaders
 
