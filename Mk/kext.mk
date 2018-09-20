@@ -6,8 +6,8 @@
 # Designed to be included from a Makefile which defines the following:
 #
 # KEXTNAME        short name of the kext (e.g. example)
-# KEXTVERSION     version number, cf TN2420 (e.g. 1.0.0)
-# KEXTBUILD       build number, cd TN2420 (e.g. 1.0.0d1)
+# KEXTVERSION     version number, cf. TN2420 (e.g. 1.0.0)
+# KEXTBUILD       build number, cf. TN2420 (e.g. 1.0.0d1)
 # BUNDLEDOMAIN    the reverse DNS notation prefix (e.g. com.example)
 #
 # Optionally, the Makefile can define the following:
