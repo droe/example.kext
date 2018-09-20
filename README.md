@@ -38,10 +38,6 @@ path.
 
 ## Installation
 
-To create a signed kext that will load in default system configuration with SIP
-enabled, you will need to obtain a Developer ID certificate specifically for
-signing kernel extensions.
-
 As of OS X 10.10 Yosemite, kernel extensions need to be signed by default.  You
 need to enable `kext-dev-mode` in order to load unsigned kernel extensions:
 
@@ -55,6 +51,10 @@ in order to load unsigned kernel extensions:
 1.  Boot into Recovery OS by pressing <kbd>cmd⌘</kbd>+<kbd>r</kbd> during boot
 2.  Run `csrutil enable --without kext`
 3.  Reboot
+
+To create a signed kext that will load in default system configuration with SIP
+enabled, you will need to obtain a Developer ID certificate specifically for
+signing kernel extensions.
 
 As of macOS 10.13 High Sierra, all kexts need to be explicitly approved by the
 user before they can be loaded.  Workarounds include disabling user approval or
