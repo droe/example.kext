@@ -12,12 +12,7 @@ COPYRIGHT=	Copyright (c) 2018 John Doe. All rights reserved.
 #CFLAGS=	-Wno-\#warnings
 #KLFLAGS=	-unsupported
 
-# Create a signed kext with separate development and production identities;
-# see SIGNING IDENTITIES in codesign(1)
-#ifeq "$(KEXTVERSION)" "$(KEXTBUILD)"
-#DEVIDKEXT=	"6BF4C67B70848E7A0635F1F1ADC6C9F869B69CEE" # prod
-#else
-#DEVIDKEXT=	"A6D93D1FFBDBEA6157560516ADED1F9ACD6FDE89" # dev
-#endif
+# Create a signed kext, see SIGNING IDENTITIES in codesign(1)
+#DEVIDKEXT=	"your signing identity"
 
 include Mk/kext.mk
