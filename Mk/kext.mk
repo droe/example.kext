@@ -9,6 +9,7 @@
 # KEXTVERSION     version number, cf. TN2420 (e.g. 1.0.0)
 # KEXTBUILD       build number, cf. TN2420 (e.g. 1.0.0d1)
 # BUNDLEDOMAIN    the reverse DNS notation prefix (e.g. com.example)
+# COPYRIGHT       human readable copyright string
 #
 # Optionally, the Makefile can define the following:
 #
@@ -163,13 +164,14 @@ $(KEXTMACHO): $(OBJS)
 	$(CC) $(LDFLAGS) -static -o $@ $(LIBS) $^
 	otool -h $@
 
-Info.plist~: Info.plist.in
-	cat $^ \
+Info.plist~: Info.plist.in $(MKFS)
+	cat $< \
 	| sed -e 's/__KEXTNAME__/$(KEXTNAME)/g' \
 	      -e 's/__KEXTMACHO__/$(KEXTMACHO)/g' \
 	      -e 's/__KEXTVERSION__/$(KEXTVERSION)/g' \
 	      -e 's/__KEXTBUILD__/$(KEXTBUILD)/g' \
 	      -e 's/__BUNDLEID__/$(BUNDLEID)/g' \
+	      -e 's/__COPYRIGHT__/$(COPYRIGHT)/g' \
 	>$@
 
 $(KEXTBUNDLE): $(KEXTMACHO) Info.plist~

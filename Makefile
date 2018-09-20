@@ -2,6 +2,7 @@ KEXTNAME=	example
 KEXTVERSION=	1.0.0
 KEXTBUILD=	1.0.0d1
 BUNDLEDOMAIN=	com.example
+COPYRIGHT=	Copyright (c) 2018 John Doe. All rights reserved.
 
 # Target an earlier version of macOS using an alternative Xcode installation
 #DEVELOPER_DIR=	/Applications/Xcode-7.3.1.app/Contents/Developer
