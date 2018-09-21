@@ -6,14 +6,21 @@ https://github.com/droe/example.kext
 ## Overview
 
 `Mk/kext.mk` is a makefile for building macOS kernel extensions without the
-opaque Xcode project bloat.
+opaque Xcode project bloat.  This example kernel extension for macOS
+demonstrates how to use `Mk/kext.mk`.
 
-This example kernel extension for macOS demonstrates how to use `Mk/kext.mk`.
+`Mk/xcode.mk` is a makefile for Xcode selection, macOS min version targeting
+and SDK selection.  While it is used by `Mk/kext.mk` internally, it can also be
+used standalone in makefiles for userspace code on macOS.
 
 All this is by no means rocket science, but since there exists very little
 up-to-date documentation on how to build kernel extensions manually, this might
 save other inclined kernel hackers with a dislike for GUI based build
 configuration some relief.
+
+`Mk/kext.mk` and `Mk/xcode.mk` were originally written for
+[xnumon](https://github.com/droe/xnumon), but have been made available in this
+separate project under a less restrictive license.
 
 
 ## Requirements
