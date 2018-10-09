@@ -15,7 +15,7 @@ used standalone in makefiles for userspace code on macOS.
 
 All this is by no means rocket science, but since there exists very little
 up-to-date documentation on how to build kernel extensions manually, this might
-save other inclined kernel hackers with a dislike for GUI based build
+provide other inclined kernel hackers with a dislike for GUI based build
 configuration some relief.
 
 `Mk/kext.mk` and `Mk/xcode.mk` were originally written for
@@ -24,6 +24,8 @@ separate project under a less restrictive license.
 
 
 ## Requirements
+
+There are no requirements beyond Xcode.
 
 For building kernel extensions, Apple recommends that you use the
 [latest Xcode version](https://developer.apple.com/download/)
@@ -43,7 +45,7 @@ directory as system-wide default or set `SDK` to the respective SDK name or
 path.
 
 
-## Installation
+## Kext Installation
 
 As of OS X 10.10 Yosemite, kernel extensions need to be signed by default.  You
 need to enable `kext-dev-mode` in order to load unsigned kernel extensions:
@@ -79,5 +81,7 @@ pull requests or issues pertaining to bugs or missing features.
 
 ## Bugs
 
--   `Mk/kext.mk` only compiles c sources at this point, not C++ or Objective-C.
+-   `Mk/kext.mk` is currently limited to compiling c sources into a generic
+    kext.  Adding C++ for IOKit drivers should be easy enough to add (tested
+    pull request appreciated!).
 
